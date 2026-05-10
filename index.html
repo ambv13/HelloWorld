@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Para sa'yo, Rona <3</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Raleway:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple-deep: #2a1a3e;
+    --purple-mid: #6b3fa0;
+    --purple-light: #c9a8e0;
+    --purple-pale: #f0e8fa;
+    --white: #faf9ff;
+    --black: #0d0a12;
+    --cream: #f7f3ee;
+  }
+
+  body {
+    background: var(--black);
+    font-family: 'Raleway', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  .starfield {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--dur) ease-in-out infinite alternate;
+    opacity: 0;
+  }
+
+  @keyframes twinkle {
+    0% { opacity: 0.05; transform: scale(0.8); }
+    100% { opacity: 0.6; transform: scale(1.2); }
+  }
+
+  .scene {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem 1rem 3rem;
+  }
+
+  .title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    font-weight: 300;
+    color: var(--purple-light);
+    letter-spacing: 0.25em;
+    text-align: center;
+    animation: fadeDown 1.5s ease 0.5s both;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .bouquet-wrap {
+    position: relative;
+    width: 320px;
+    height: 440px;
+    animation: floatUp 1.8s ease 0.2s both;
+  }
+
+  @keyframes floatUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .bouquet-wrap svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    filter: drop-shadow(0 0 32px rgba(160,100,220,0.35));
+  }
+
+  .shimmer {
+    animation: shimmer 3s ease-in-out infinite alternate;
+  }
+  @keyframes shimmer {
+    0% { filter: drop-shadow(0 0 24px rgba(160,100,220,0.3)); }
+    100% { filter: drop-shadow(0 0 48px rgba(200,150,255,0.55)); }
+  }
+
+  .petal { animation: bloomIn var(--bd) var(--bde) both; }
+  @keyframes bloomIn {
+    from { transform-origin: var(--ox, 50%) var(--oy, 80%); transform: scale(0) rotate(var(--br, 0deg)); opacity: 0; }
+    to { transform-origin: var(--ox, 50%) var(--oy, 80%); transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  .stem { animation: growUp 1.2s ease 0.3s both; stroke-dasharray: 400; stroke-dashoffset: 400; }
+  @keyframes growUp { to { stroke-dashoffset: 0; } }
+
+  .leaf { animation: leafIn 0.8s ease var(--ld) both; }
+  @keyframes leafIn {
+    from { transform-origin: var(--lox, 50%) 100%; transform: scale(0) rotate(var(--lr, 0deg)); opacity: 0; }
+    to { transform-origin: var(--lox, 50%) 100%; transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  .ribbon { animation: ribbonIn 0.8s cubic-bezier(0.34,1.56,0.64,1) 1.6s both; }
+  @keyframes ribbonIn {
+    from { transform: scaleX(0); opacity: 0; }
+    to { transform: scaleX(1); opacity: 1; }
+  }
+
+  .mail-btn {
+    position: relative;
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    animation: fadeDown 1.2s ease 2s both;
+    transition: transform 0.3s ease;
+  }
+
+  .mail-btn:hover { transform: translateY(-4px) scale(1.04); }
+  .mail-btn:active { transform: scale(0.97); }
+
+  .mail-btn svg { filter: drop-shadow(0 0 12px rgba(180,130,255,0.5)); }
+  .mail-btn:hover svg { filter: drop-shadow(0 0 22px rgba(200,160,255,0.8)); }
+  .mail-hint {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--purple-light);
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .letter-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(5, 2, 10, 0.88);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .letter-overlay.open { display: flex; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .letter-card {
+    position: relative;
+    background: var(--cream);
+    border-radius: 2px;
+    max-width: 540px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 3rem 2.8rem 2.5rem;
+    box-shadow: 0 0 80px rgba(160,80,255,0.3), 0 40px 80px rgba(0,0,0,0.6);
+    animation: letterPop 0.5s cubic-bezier(0.34,1.3,0.64,1) 0.1s both;
+    border-top: 4px solid var(--purple-mid);
+  }
+
+  @keyframes letterPop {
+    from { opacity: 0; transform: translateY(30px) scale(0.94); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .letter-deco-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #2a1a3e, #8b4ecf, #c084f5, #8b4ecf, #2a1a3e);
+  }
+
+  .letter-stamp {
+    position: absolute;
+    top: 1.4rem;
+    right: 1.8rem;
+    width: 48px;
+    height: 48px;
+    border: 2px solid var(--purple-mid);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+
+  .letter-close {
+    position: absolute;
+    top: 0.9rem;
+    left: 1.2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.3rem;
+    color: #888;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .letter-close:hover { color: var(--purple-mid); }
+
+  .letter-greeting {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--purple-deep);
+    margin-bottom: 1.4rem;
+  }
+
+  .letter-body {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: #1a1020;
+    margin-bottom: 1.6rem;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  .letter-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--purple-mid);
+    line-height: 1.8;
+    border-left: 3px solid var(--purple-light);
+    padding-left: 1rem;
+    margin: 1.2rem 0 1.6rem;
+  }
+
+  .letter-sign {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: #1a1020;
+    line-height: 2;
+    text-align: right;
+  }
+
+  .letter-divider {
+    border: none;
+    border-top: 1px solid rgba(107,63,160,0.2);
+    margin: 1.2rem 0;
+  }
+
+  .petal-deco {
+    position: absolute;
+    bottom: 1rem;
+    left: 1.5rem;
+    opacity: 0.12;
+    pointer-events: none;
+  }
+
+  .floating-petals { position: fixed; inset: 0; pointer-events: none; z-index: 2; }
+  .fp {
+    position: absolute;
+    border-radius: 50% 0 50% 0;
+    opacity: 0;
+    animation: fall var(--fd) linear var(--fde) infinite;
+  }
+  @keyframes fall {
+    0% { opacity: 0; transform: translateY(-40px) rotate(0deg); }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.3; }
+    100% { opacity: 0; transform: translateY(105vh) rotate(540deg); }
+  }
+</style>
+</head>
+<body>
+
+<div class="starfield" id="starfield"></div>
+<div class="floating-petals" id="fp"></div>
+
+<div class="scene">
+  <p class="title">Flowers for you, Rona</p>
+
+  <div class="bouquet-wrap shimmer">
+    <svg viewBox="0 0 320 440" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- stems -->
+      <g stroke-linecap="round">
+        <path class="stem" d="M160 420 Q155 360 148 300 Q142 240 138 200" fill="none" stroke="#2d5c1e" stroke-width="3.5" style="animation-delay:0.3s"/>
+        <path class="stem" d="M160 420 Q162 370 165 310 Q168 260 170 215" fill="none" stroke="#2d5c1e" stroke-width="3" style="animation-delay:0.4s"/>
+        <path class="stem" d="M160 420 Q158 375 152 330 Q146 280 155 240" fill="none" stroke="#2d5c1e" stroke-width="2.8" style="animation-delay:0.45s"/>
+        <path class="stem" d="M160 420 Q163 365 172 305 Q180 250 185 210" fill="none" stroke="#2d5c1e" stroke-width="2.5" style="animation-delay:0.5s"/>
+        <path class="stem" d="M160 420 Q157 370 145 315 Q133 265 128 220" fill="none" stroke="#2d5c1e" stroke-width="2.5" style="animation-delay:0.55s"/>
+        <path class="stem" d="M160 420 Q164 360 178 300 Q190 250 195 225" fill="none" stroke="#2d5c1e" stroke-width="2.2" style="animation-delay:0.6s"/>
+        <path class="stem" d="M160 420 Q154 368 140 310 Q126 255 120 230" fill="none" stroke="#2d5c1e" stroke-width="2.2" style="animation-delay:0.65s"/>
+      </g>
+
+      <!-- leaves -->
+      <ellipse class="leaf" cx="135" cy="330" rx="22" ry="10" fill="#2d5c1e" transform="rotate(-35,135,330)" style="--ld:0.9s;--lox:100%;--lr:-20deg"/>
+      <ellipse class="leaf" cx="172" cy="310" rx="20" ry="9" fill="#3a7026" transform="rotate(30,172,310)" style="--ld:1s;--lox:0%;--lr:20deg"/>
+      <ellipse class="leaf" cx="142" cy="280" rx="18" ry="8" fill="#2d5c1e" transform="rotate(-40,142,280)" style="--ld:1.1s;--lox:100%;--lr:-20deg"/>
+      <ellipse class="leaf" cx="176" cy="265" rx="16" ry="7" fill="#3a7026" transform="rotate(25,176,265)" style="--ld:1.15s;--lox:0%;--lr:15deg"/>
+
+      <!-- FLOWER 1: center big purple rose -->
+      <g class="petal" style="--bd:0.7s;--bde:0.8s;--ox:50%;--oy:90%;--br:15deg">
+        <ellipse cx="155" cy="175" rx="28" ry="38" fill="#7b2d8b" opacity="0.9"/>
+        <ellipse cx="155" cy="168" rx="22" ry="30" fill="#9c3fb0"/>
+        <ellipse cx="155" cy="163" rx="16" ry="22" fill="#b85fd4"/>
+        <ellipse cx="155" cy="160" rx="10" ry="14" fill="#ce84e8"/>
+        <ellipse cx="155" cy="158" rx="5" ry="7" fill="#e4aaff"/>
+      </g>
+
+      <!-- outer petals ring -->
+      <g class="petal" style="--bd:0.6s;--bde:0.9s;--ox:50%;--oy:80%;--br:-20deg">
+        <ellipse cx="127" cy="182" rx="16" ry="26" fill="#6a2078" opacity="0.85" transform="rotate(-30,127,182)"/>
+        <ellipse cx="183" cy="182" rx="16" ry="26" fill="#6a2078" opacity="0.85" transform="rotate(30,183,182)"/>
+        <ellipse cx="155" cy="152" rx="16" ry="26" fill="#6a2078" opacity="0.8" transform="rotate(0,155,152)"/>
+        <ellipse cx="135" cy="160" rx="14" ry="24" fill="#7b2d8b" opacity="0.8" transform="rotate(-50,135,160)"/>
+        <ellipse cx="175" cy="160" rx="14" ry="24" fill="#7b2d8b" opacity="0.8" transform="rotate(50,175,160)"/>
+        <ellipse cx="143" cy="195" rx="14" ry="22" fill="#7b2d8b" opacity="0.75" transform="rotate(-15,143,195)"/>
+        <ellipse cx="167" cy="195" rx="14" ry="22" fill="#7b2d8b" opacity="0.75" transform="rotate(15,167,195)"/>
+      </g>
+
+      <!-- FLOWER 2: white daisy left -->
+      <g class="petal" style="--bd:0.6s;--bde:1.1s;--ox:50%;--oy:90%;--br:-10deg">
+        <ellipse cx="120" cy="215" rx="8" ry="18" fill="#f0e8fa" transform="rotate(-10,120,215)"/>
+        <ellipse cx="108" cy="218" rx="8" ry="18" fill="#ede0f8" transform="rotate(-40,108,218)"/>
+        <ellipse cx="102" cy="228" rx="8" ry="18" fill="#f0e8fa" transform="rotate(-65,102,228)"/>
+        <ellipse cx="104" cy="240" rx="8" ry="18" fill="#ede0f8" transform="rotate(-85,104,240)"/>
+        <ellipse cx="115" cy="248" rx="8" ry="18" fill="#f0e8fa" transform="rotate(-110,115,248)"/>
+        <ellipse cx="127" cy="246" rx="8" ry="18" fill="#ede0f8" transform="rotate(-135,127,246)"/>
+        <ellipse cx="133" cy="236" rx="8" ry="18" fill="#f0e8fa" transform="rotate(-160,133,236)"/>
+        <ellipse cx="131" cy="224" rx="8" ry="18" fill="#ede0f8" transform="rotate(160,131,224)"/>
+        <circle cx="117" cy="232" r="10" fill="#f5e0a0"/>
+        <circle cx="117" cy="232" r="6" fill="#e8c860"/>
+      </g>
+
+      <!-- FLOWER 3: white daisy right -->
+      <g class="petal" style="--bd:0.6s;--bde:1.25s;--ox:50%;--oy:90%;--br:10deg">
+        <ellipse cx="195" cy="210" rx="8" ry="18" fill="#f4eeff" transform="rotate(10,195,210)"/>
+        <ellipse cx="207" cy="214" rx="8" ry="18" fill="#eee0fa" transform="rotate(40,207,214)"/>
+        <ellipse cx="212" cy="224" rx="8" ry="18" fill="#f4eeff" transform="rotate(65,212,224)"/>
+        <ellipse cx="210" cy="237" rx="8" ry="18" fill="#eee0fa" transform="rotate(85,210,237)"/>
+        <ellipse cx="199" cy="244" rx="8" ry="18" fill="#f4eeff" transform="rotate(110,199,244)"/>
+        <ellipse cx="187" cy="242" rx="8" ry="18" fill="#eee0fa" transform="rotate(135,187,242)"/>
+        <ellipse cx="181" cy="232" rx="8" ry="18" fill="#f4eeff" transform="rotate(160,181,232)"/>
+        <ellipse cx="183" cy="220" rx="8" ry="18" fill="#eee0fa" transform="rotate(-160,183,220)"/>
+        <circle cx="197" cy="228" r="10" fill="#f5e0a0"/>
+        <circle cx="197" cy="228" r="6" fill="#e8c860"/>
+      </g>
+
+      <!-- FLOWER 4: small purple top left -->
+      <g class="petal" style="--bd:0.55s;--bde:1.35s;--ox:50%;--oy:90%;--br:-5deg">
+        <ellipse cx="128" cy="195" rx="9" ry="16" fill="#c9a8e0" transform="rotate(-10,128,195)"/>
+        <ellipse cx="118" cy="198" rx="9" ry="16" fill="#b885d4" transform="rotate(-45,118,198)"/>
+        <ellipse cx="115" cy="209" rx="9" ry="16" fill="#c9a8e0" transform="rotate(-80,115,209)"/>
+        <ellipse cx="123" cy="218" rx="9" ry="16" fill="#b885d4" transform="rotate(-115,123,218)"/>
+        <ellipse cx="135" cy="217" rx="9" ry="16" fill="#c9a8e0" transform="rotate(-150,135,217)"/>
+        <ellipse cx="140" cy="206" rx="9" ry="16" fill="#b885d4" transform="rotate(170,140,206)"/>
+        <circle cx="128" cy="207" r="8" fill="#ce84e8"/>
+        <circle cx="128" cy="207" r="4" fill="#e4aaff"/>
+      </g>
+
+      <!-- FLOWER 5: small black/deep purple top right -->
+      <g class="petal" style="--bd:0.55s;--bde:1.4s;--ox:50%;--oy:90%;--br:5deg">
+        <ellipse cx="185" cy="190" rx="9" ry="16" fill="#3d1157" transform="rotate(10,185,190)"/>
+        <ellipse cx="195" cy="194" rx="9" ry="16" fill="#2d0940" transform="rotate(45,195,194)"/>
+        <ellipse cx="198" cy="206" rx="9" ry="16" fill="#3d1157" transform="rotate(80,198,206)"/>
+        <ellipse cx="190" cy="215" rx="9" ry="16" fill="#2d0940" transform="rotate(115,190,215)"/>
+        <ellipse cx="178" cy="214" rx="9" ry="16" fill="#3d1157" transform="rotate(150,178,214)"/>
+        <ellipse cx="173" cy="203" rx="9" ry="16" fill="#2d0940" transform="rotate(-170,173,203)"/>
+        <circle cx="185" cy="204" r="8" fill="#4a1570"/>
+        <circle cx="185" cy="204" r="4" fill="#7b2d8b"/>
+      </g>
+
+      <!-- FLOWER 6: tiny accent white top -->
+      <g class="petal" style="--bd:0.5s;--bde:1.5s;--ox:50%;--oy:100%;--br:0deg">
+        <ellipse cx="155" cy="140" rx="7" ry="14" fill="#faf5ff" transform="rotate(0,155,140)"/>
+        <ellipse cx="146" cy="144" rx="7" ry="14" fill="#eee5f8" transform="rotate(-40,146,144)"/>
+        <ellipse cx="143" cy="155" rx="7" ry="14" fill="#faf5ff" transform="rotate(-75,143,155)"/>
+        <ellipse cx="150" cy="163" rx="7" ry="14" fill="#eee5f8" transform="rotate(-115,150,163)"/>
+        <ellipse cx="160" cy="161" rx="7" ry="14" fill="#faf5ff" transform="rotate(-145,160,161)"/>
+        <ellipse cx="165" cy="151" rx="7" ry="14" fill="#eee5f8" transform="rotate(170,165,151)"/>
+        <circle cx="155" cy="152" r="7" fill="#e8d48a"/>
+        <circle cx="155" cy="152" r="3.5" fill="#d4b84a"/>
+      </g>
+
+      <!-- tiny scattered buds -->
+      <g class="petal" style="--bd:0.4s;--bde:1.6s;--ox:50%;--oy:90%;--br:0deg">
+        <ellipse cx="100" cy="200" rx="5" ry="11" fill="#c9a8e0" transform="rotate(-20,100,200)"/>
+        <ellipse cx="92" cy="207" rx="5" ry="11" fill="#b885d4" transform="rotate(-60,92,207)"/>
+        <ellipse cx="93" cy="218" rx="5" ry="11" fill="#c9a8e0" transform="rotate(-100,93,218)"/>
+        <ellipse cx="101" cy="223" rx="5" ry="11" fill="#b885d4" transform="rotate(-140,101,223)"/>
+        <ellipse cx="109" cy="218" rx="5" ry="11" fill="#c9a8e0" transform="rotate(170,109,218)"/>
+        <ellipse cx="110" cy="208" rx="5" ry="11" fill="#b885d4" transform="rotate(130,110,208)"/>
+        <circle cx="101" cy="211" r="5" fill="#8b4ecf"/>
+      </g>
+
+      <g class="petal" style="--bd:0.4s;--bde:1.65s;--ox:50%;--oy:90%;--br:0deg">
+        <ellipse cx="214" cy="198" rx="5" ry="11" fill="#3d1157" transform="rotate(15,214,198)"/>
+        <ellipse cx="221" cy="206" rx="5" ry="11" fill="#2d0940" transform="rotate(55,221,206)"/>
+        <ellipse cx="219" cy="216" rx="5" ry="11" fill="#3d1157" transform="rotate(95,219,216)"/>
+        <ellipse cx="211" cy="221" rx="5" ry="11" fill="#2d0940" transform="rotate(135,211,221)"/>
+        <ellipse cx="203" cy="216" rx="5" ry="11" fill="#3d1157" transform="rotate(175,203,216)"/>
+        <ellipse cx="202" cy="206" rx="5" ry="11" fill="#2d0940" transform="rotate(-145,202,206)"/>
+        <circle cx="212" cy="211" r="5" fill="#5a1880"/>
+      </g>
+
+      <!-- green filler leaves mid-bouquet -->
+      <ellipse cx="155" cy="240" rx="12" ry="6" fill="#2d5c1e" opacity="0.7" transform="rotate(10,155,240)"/>
+      <ellipse cx="148" cy="250" rx="10" ry="5" fill="#3a7026" opacity="0.7" transform="rotate(-20,148,250)"/>
+      <ellipse cx="163" cy="248" rx="10" ry="5" fill="#2d5c1e" opacity="0.7" transform="rotate(25,163,248)"/>
+
+      <!-- Ribbon / wrap at base -->
+      <g class="ribbon" style="transform-origin: 160px 370px;">
+        <rect x="128" y="350" width="64" height="60" rx="3" fill="#2a1a3e" opacity="0.95"/>
+        <rect x="128" y="350" width="64" height="12" rx="3" fill="#6b3fa0"/>
+        <rect x="128" y="355" width="64" height="6" fill="#8b5ecf" opacity="0.5"/>
+        <!-- ribbon bow -->
+        <ellipse cx="147" cy="352" rx="12" ry="7" fill="#9c3fb0" transform="rotate(-20,147,352)"/>
+        <ellipse cx="173" cy="352" rx="12" ry="7" fill="#9c3fb0" transform="rotate(20,173,352)"/>
+        <circle cx="160" cy="352" r="5" fill="#ce84e8"/>
+        <!-- wrap texture lines -->
+        <line x1="140" y1="362" x2="140" y2="410" stroke="#6b3fa0" stroke-width="1" opacity="0.4"/>
+        <line x1="152" y1="362" x2="152" y2="410" stroke="#6b3fa0" stroke-width="1" opacity="0.4"/>
+        <line x1="168" y1="362" x2="168" y2="410" stroke="#6b3fa0" stroke-width="1" opacity="0.4"/>
+        <line x1="180" y1="362" x2="180" y2="410" stroke="#6b3fa0" stroke-width="1" opacity="0.4"/>
+      </g>
+
+      <!-- sparkles -->
+      <g opacity="0.85">
+        <text x="88" y="158" font-size="14" fill="#e4aaff" style="animation:twinkle 2.1s ease-in-out infinite alternate">✦</text>
+        <text x="225" y="172" font-size="12" fill="#c9a8e0" style="animation:twinkle 1.7s ease-in-out 0.4s infinite alternate">✦</text>
+        <text x="100" y="240" font-size="10" fill="#f0e8fa" style="animation:twinkle 2.4s ease-in-out 0.8s infinite alternate">✦</text>
+        <text x="220" y="250" font-size="11" fill="#e4aaff" style="animation:twinkle 1.9s ease-in-out 1s infinite alternate">✦</text>
+        <text x="148" y="128" font-size="16" fill="#ffffff" style="animation:twinkle 2.2s ease-in-out 0.6s infinite alternate">✦</text>
+      </g>
+    </svg>
+  </div>
+
+  <button class="mail-btn" onclick="openLetter()" aria-label="Open love letter">
+    <svg width="68" height="56" viewBox="0 0 68 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="66" height="54" rx="5" fill="#1a0c2e" stroke="#6b3fa0" stroke-width="1.5"/>
+      <path d="M2 4 L34 32 L66 4" stroke="#9c3fb0" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M2 52 L24 30" stroke="#6b3fa0" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M66 52 L44 30" stroke="#6b3fa0" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <circle cx="34" cy="32" r="5" fill="#ce84e8" opacity="0.5"/>
+      <text x="34" y="19" text-anchor="middle" font-size="14" fill="#e4aaff">♡</text>
+    </svg>
+    <span class="mail-hint">open letter</span>
+  </button>
+</div>
+
+<!-- Letter overlay -->
+<div class="letter-overlay" id="letterOverlay" onclick="closeLetter(event)">
+  <div class="letter-card" id="letterCard">
+    <div class="letter-deco-top"></div>
+    <button class="letter-close" onclick="closeLetter(null, true)" aria-label="Close">✕</button>
+
+    <p class="letter-greeting">Mahal kong Rona,</p>
+
+    <p class="letter-body">
+      Hii Wonaa! Flowers for youuuuu, mahal kooo! I just wanna thank you dahil dumating ka sa buhay ko. I've been happier ever since you came into my life. Magkaroon man tayo ng hindi pagkakasundo minsan, let's communicate and understand each other, ha? Also, let's do what we can to become the best versions of ourselves. Let's be each other's inspiration to do more things that will help us grow, make more memories, and get through life's ups and downs together.
+    </p>
+
+    <hr class="letter-divider"/>
+
+    <p class="letter-quote">
+      "I love you beyond every sunset, every star, and every lifetime I could ever have," Rona.
+    </p>
+
+    <hr class="letter-divider"/>
+
+    <div class="letter-sign">
+      <p>Nagmamahal,</p>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:#6b3fa0;margin-top:0.3rem;">Amrafel</p>
+    </div>
+
+    <svg class="petal-deco" width="90" height="90" viewBox="0 0 90 90">
+      <ellipse cx="45" cy="45" rx="30" ry="12" fill="#8b4ecf" transform="rotate(0,45,45)"/>
+      <ellipse cx="45" cy="45" rx="30" ry="12" fill="#8b4ecf" transform="rotate(45,45,45)"/>
+      <ellipse cx="45" cy="45" rx="30" ry="12" fill="#8b4ecf" transform="rotate(90,45,45)"/>
+      <ellipse cx="45" cy="45" rx="30" ry="12" fill="#8b4ecf" transform="rotate(135,45,45)"/>
+      <circle cx="45" cy="45" r="10" fill="#ce84e8"/>
+    </svg>
+  </div>
+</div>
+
+<script>
+const starfield = document.getElementById('starfield');
+for (let i = 0; i < 120; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.5 + 0.5;
+  s.style.cssText = `
+    left:${Math.random()*100}%;
+    top:${Math.random()*100}%;
+    width:${size}px;height:${size}px;
+    --dur:${(Math.random()*3+1.5).toFixed(1)}s;
+    animation-delay:${(Math.random()*4).toFixed(1)}s
+  `;
+  starfield.appendChild(s);
+}
+
+const fpCont = document.getElementById('fp');
+const colors = ['#c9a8e0','#f0e8fa','#e4aaff','#3d1157','#ffffff','#b885d4'];
+for (let i = 0; i < 18; i++) {
+  const p = document.createElement('div');
+  p.className = 'fp';
+  const c = colors[Math.floor(Math.random()*colors.length)];
+  const sz = Math.random()*10+5;
+  p.style.cssText = `
+    left:${Math.random()*100}%;
+    width:${sz}px;height:${sz*0.6}px;
+    background:${c};
+    opacity:0.5;
+    --fd:${(Math.random()*8+7).toFixed(1)}s;
+    --fde:${(Math.random()*8).toFixed(1)}s;
+    border-radius: ${Math.random()>0.5?'50% 0 50% 0':'0 50% 0 50%'};
+  `;
+  fpCont.appendChild(p);
+}
+
+function openLetter() {
+  document.getElementById('letterOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLetter(e, force) {
+  if (force || (e && e.target === document.getElementById('letterOverlay'))) {
+    document.getElementById('letterOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+</script>
+</body>
+</html>
